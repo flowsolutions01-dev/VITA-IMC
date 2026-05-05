@@ -787,6 +787,9 @@ body {
     <div class="nav-item" id="nav-logros" onclick="goTab('logros')">
       <div class="nav-icon">🏆</div><div class="nav-label">Logros</div>
     </div>
+    <div class="nav-item" id="nav-perfil" onclick="goTab('perfil')">
+      <div class="nav-icon">⚙️</div><div class="nav-label">Perfil</div>
+    </div>
   </div>
 </nav>
 
@@ -1057,7 +1060,130 @@ body {
     <div class="achievements-grid" id="achGrid"></div>
   </div>
 
+  <!-- ══ PERFIL ══ -->
+  <div class="page" id="page-perfil">
+    <div class="page-title">Mi Perfil</div>
+    <div class="page-subtitle">Edita tus datos y objetivos</div>
+
+    <div class="glass-card" style="text-align:center;margin-bottom:16px">
+      <div id="pAvatar" style="font-size:60px;margin-bottom:8px">😊</div>
+      <div id="pName" style="font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px">—</div>
+      <div id="pStats" style="font-size:13px;color:var(--text3);font-weight:600">—</div>
+    </div>
+
+    <div class="glass-card">
+      <div class="form-section-title" style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:16px">DATOS PERSONALES</div>
+      <div class="form-section">
+        <div class="input-group" id="ig-ename">
+          <div class="input-row">
+            <div class="input-icon">👤</div>
+            <div class="input-inner">
+              <div class="input-label">NOMBRE O APODO</div>
+              <input class="input-field" id="eName" type="text" placeholder="Tu nombre" maxlength="20">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Por favor ingresa tu nombre</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title" style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px">AVATAR</div>
+        <div class="emoji-grid" id="editAvatarGrid">
+          <div class="emoji-btn" data-e="😊">😊</div>
+          <div class="emoji-btn" data-e="🦁">🦁</div>
+          <div class="emoji-btn" data-e="🐯">🐯</div>
+          <div class="emoji-btn" data-e="🐻">🐻</div>
+          <div class="emoji-btn" data-e="🦊">🦊</div>
+          <div class="emoji-btn" data-e="🐼">🐼</div>
+          <div class="emoji-btn" data-e="🦋">🦋</div>
+          <div class="emoji-btn" data-e="🌸">🌸</div>
+          <div class="emoji-btn" data-e="⚡">⚡</div>
+          <div class="emoji-btn" data-e="🌊">🌊</div>
+          <div class="emoji-btn" data-e="🔥">🔥</div>
+          <div class="emoji-btn" data-e="🌙">🌙</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title" style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px">MEDIDAS</div>
+        <div class="row-2">
+          <div class="input-group" id="ig-eheight">
+            <div class="input-row">
+              <div class="input-icon">📐</div>
+              <div class="input-inner">
+                <div class="input-label">ALTURA (cm)</div>
+                <input class="input-field" id="eHeight" type="number" placeholder="170" min="100" max="250">
+              </div>
+            </div>
+            <div class="input-error-msg">⚠ Altura inválida</div>
+          </div>
+          <div class="input-group" id="ig-eweight">
+            <div class="input-row">
+              <div class="input-icon">⚖️</div>
+              <div class="input-inner">
+                <div class="input-label">PESO INICIAL (kg)</div>
+                <input class="input-field" id="eWeight" type="number" placeholder="70" min="30" max="300" step="0.1">
+              </div>
+            </div>
+            <div class="input-error-msg">⚠ Peso inválido</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title" style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px">OBJETIVO</div>
+        <div class="input-group" id="ig-egoal">
+          <div class="input-row">
+            <div class="input-icon">🎯</div>
+            <div class="input-inner">
+              <div class="input-label">PESO META (kg)</div>
+              <input class="input-field" id="eGoal" type="number" placeholder="65" min="30" max="300" step="0.1">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Ingresa tu peso objetivo</div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="input-group" id="ig-edate">
+          <div class="input-row">
+            <div class="input-icon">📅</div>
+            <div class="input-inner">
+              <div class="input-label">FECHA LÍMITE</div>
+              <input class="input-field" id="eDate" type="date">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Selecciona una fecha</div>
+        </div>
+      </div>
+      <button class="btn-vita" onclick="saveProfile()">Guardar cambios ✓</button>
+    </div>
+
+    <div style="margin-top:8px;border:1px solid rgba(255,59,48,0.25);border-radius:var(--radius-xl);overflow:hidden">
+      <div style="padding:20px 24px;background:rgba(255,59,48,0.06)">
+        <div style="font-size:13px;font-weight:800;color:var(--v-red);margin-bottom:4px">⚠️ Zona de reinicio</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:16px">Estas acciones no se pueden deshacer. Tus datos se borrarán del dispositivo.</div>
+        <button onclick="confirmReset('data')" style="width:100%;padding:13px;border:1px solid rgba(255,59,48,0.4);border-radius:var(--radius-md);background:rgba(255,59,48,0.1);color:var(--v-red);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">
+          🗑 Borrar historial y sesiones
+        </button>
+        <button onclick="confirmReset('all')" style="width:100%;padding:13px;border:1px solid rgba(255,59,48,0.6);border-radius:var(--radius-md);background:rgba(255,59,48,0.15);color:var(--v-red);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer">
+          💥 Reiniciar todo desde cero
+        </button>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <div style="text-align:center;font-size:11px;color:var(--text3);line-height:1.6;padding:0 10px">
+      🔒 VITA-IMC no envía tus datos a ningún servidor.<br>Todo se almacena localmente en tu dispositivo.
+    </div>
+  </div>
+
 </main>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-backdrop" id="confirmModal">
+  <div class="modal-sheet">
+    <span class="sheet-handle"></span>
+    <div class="sheet-title" id="confirmTitle">¿Estás seguro?</div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px" id="confirmMsg">Esta acción no se puede deshacer.</div>
+    <button class="btn-vita" style="background:linear-gradient(135deg,#FF3B30,#FF2D55)" onclick="doReset()">Sí, confirmar</button>
+    <button class="btn-secondary" onclick="closeConfirm()">Cancelar</button>
+  </div>
+</div>
 
 <!-- SESSION MODAL -->
 <div class="modal-backdrop" id="sessModal">
@@ -1449,7 +1575,93 @@ function goTab(tab){
   document.getElementById('page-'+tab).classList.add('active');
   document.getElementById('nav-'+tab).classList.add('active');
   if(tab==='medir') document.getElementById('mResult').classList.remove('show');
+  if(tab==='perfil') loadProfileEditor();
   refreshAll();
+}
+
+// ── PROFILE EDITOR ──
+let editAvatar = '😊';
+let resetType = '';
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('editAvatarGrid').addEventListener('click',e=>{
+    const btn=e.target.closest('.emoji-btn'); if(!btn)return;
+    document.querySelectorAll('#editAvatarGrid .emoji-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); editAvatar=btn.dataset.e;
+  });
+  ['eName','eHeight','eWeight','eGoal','eDate'].forEach(id=>{
+    const map={eName:'ig-ename',eHeight:'ig-eheight',eWeight:'ig-eweight',eGoal:'ig-egoal',eDate:'ig-edate'};
+    document.getElementById(id)?.addEventListener('input',()=>clearError(map[id]));
+  });
+});
+
+function loadProfileEditor(){
+  if(!profile)return;
+  document.getElementById('pAvatar').textContent=profile.emoji;
+  document.getElementById('pName').textContent=profile.name;
+  document.getElementById('pStats').textContent=`${measurements.length} mediciones · Altura: ${profile.height}cm · Meta: ${profile.goalWeight}kg`;
+  document.getElementById('eName').value=profile.name;
+  document.getElementById('eHeight').value=profile.height;
+  document.getElementById('eWeight').value=profile.startWeight;
+  document.getElementById('eGoal').value=profile.goalWeight;
+  document.getElementById('eDate').value=profile.goalDate||'';
+  editAvatar=profile.emoji;
+  document.querySelectorAll('#editAvatarGrid .emoji-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.e===profile.emoji);
+  });
+}
+
+function saveProfile(){
+  const name=document.getElementById('eName').value.trim();
+  const height=parseFloat(document.getElementById('eHeight').value);
+  const weight=parseFloat(document.getElementById('eWeight').value);
+  const goal=parseFloat(document.getElementById('eGoal').value);
+  const date=document.getElementById('eDate').value;
+  let ok=true;
+  if(!validate('ig-ename',name.length>=1))ok=false;
+  if(!validate('ig-eheight',height>=100&&height<=250))ok=false;
+  if(!validate('ig-eweight',weight>=30&&weight<=300))ok=false;
+  if(!validate('ig-egoal',goal>=30&&goal<=300))ok=false;
+  if(!validate('ig-edate',!!date))ok=false;
+  if(!ok){toast('⚠️ Completa todos los campos correctamente');return;}
+  profile.name=name; profile.emoji=editAvatar;
+  profile.height=height; profile.startWeight=weight;
+  profile.goalWeight=goal; profile.goalDate=date;
+  save();
+  document.getElementById('hdrAvatar').textContent=profile.emoji;
+  refreshAll();
+  loadProfileEditor();
+  toast('✅ Perfil actualizado correctamente');
+}
+
+function confirmReset(type){
+  resetType=type;
+  const modal=document.getElementById('confirmModal');
+  if(type==='data'){
+    document.getElementById('confirmTitle').textContent='🗑 Borrar historial';
+    document.getElementById('confirmMsg').textContent='Se eliminarán todas tus mediciones y sesiones. Tu perfil y meta se conservan. Esta acción no se puede deshacer.';
+  } else {
+    document.getElementById('confirmTitle').textContent='💥 Reiniciar todo';
+    document.getElementById('confirmMsg').textContent='Se borrará absolutamente todo: perfil, mediciones, sesiones y logros. Tendrás que configurar la app desde cero.';
+  }
+  modal.classList.add('show');
+}
+
+function closeConfirm(){ document.getElementById('confirmModal').classList.remove('show'); }
+
+function doReset(){
+  if(resetType==='data'){
+    measurements=[]; sessions=[];
+    save(); closeConfirm(); refreshAll();
+    toast('🗑 Historial y sesiones eliminados');
+  } else {
+    try{
+      localStorage.removeItem('vi2_p');
+      localStorage.removeItem('vi2_m');
+      localStorage.removeItem('vi2_s');
+    }catch(e){}
+    location.reload();
+  }
 }
 
 // ── TOAST ──
