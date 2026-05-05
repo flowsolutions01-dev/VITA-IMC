@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VITA-IMC — Tu Salud Inteligente</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --v-blue: #007AFF;
+  --v-blue2: #0A84FF;
+  --v-indigo: #5856D6;
+  --v-purple: #AF52DE;
+  --v-pink: #FF2D55;
+  --v-red: #FF3B30;
+  --v-orange: #FF9500;
+  --v-yellow: #FFCC00;
+  --v-green: #34C759;
+  --v-teal: #5AC8FA;
+  --v-mint: #00C7BE;
+
+  --grad-hero: linear-gradient(135deg, #007AFF 0%, #5856D6 50%, #AF52DE 100%);
+  --grad-card: linear-gradient(145deg, #1C1C1E, #2C2C2E);
+  --grad-glass: rgba(255,255,255,0.08);
+
+  --bg: #000000;
+  --surface: #1C1C1E;
+  --surface2: #2C2C2E;
+  --surface3: #3A3A3C;
+  --text: #FFFFFF;
+  --text2: rgba(255,255,255,0.7);
+  --text3: rgba(255,255,255,0.4);
+  --border: rgba(255,255,255,0.1);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── AMBIENT GLOW BG ── */
+.ambient {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.ambient-orb {
+  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15;
+  animation: float 8s ease-in-out infinite;
+}
+.orb1 { width:500px;height:500px;background:var(--v-blue);top:-100px;right:-100px;animation-delay:0s; }
+.orb2 { width:400px;height:400px;background:var(--v-purple);bottom:-100px;left:-100px;animation-delay:-3s; }
+.orb3 { width:300px;height:300px;background:var(--v-pink);top:40%;left:40%;animation-delay:-5s; }
+
+@keyframes float {
+  0%,100% { transform:translate(0,0) scale(1); }
+  33% { transform:translate(30px,-30px) scale(1.05); }
+  66% { transform:translate(-20px,20px) scale(0.95); }
+}
+
+/* ── HEADER ── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 14px 20px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.header-logo {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--grad-hero);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(0,122,255,0.4);
+}
+
+.logo-wordmark {
+  font-size: 17px; font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.logo-wordmark .vita { color: white; }
+.logo-wordmark .imc {
+  background: var(--grad-hero);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.pts-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,204,0,0.15);
+  border: 1px solid rgba(255,204,0,0.3);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 12px; font-weight: 700; color: var(--v-yellow);
+}
+
+.avatar-chip {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--grad-hero);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(0,122,255,0.4);
+  transition: transform 0.2s;
+}
+.avatar-chip:hover { transform: scale(1.1); }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-top: 1px solid var(--border);
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  display: none;
+}
+
+.nav-inner {
+  display: flex; justify-content: space-around;
+  max-width: 500px; margin: 0 auto;
+}
+
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 16px; border-radius: 12px;
+  cursor: pointer; transition: all 0.2s;
+  min-width: 60px;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.05); }
+
+.nav-item.active .nav-icon { color: var(--v-blue); filter: drop-shadow(0 0 8px rgba(0,122,255,0.6)); }
+.nav-item.active .nav-label { color: var(--v-blue); }
+
+.nav-icon { font-size: 22px; transition: transform 0.2s; color: var(--text3); }
+.nav-item.active .nav-icon { transform: scale(1.1); }
+.nav-label { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.2px; }
+
+/* ── MAIN ── */
+.main {
+  position: relative; z-index: 1;
+  padding: 80px 16px 120px;
+  max-width: 600px; margin: 0 auto;
+}
+
+.page { display: none; animation: pageIn 0.4s cubic-bezier(0.4,0,0.2,1); }
+.page.active { display: block; }
+
+@keyframes pageIn {
+  from { opacity:0; transform:translateY(16px) scale(0.98); }
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ── GLASS CARD ── */
+.glass-card {
+  background: rgba(28,28,30,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  position: relative; overflow: hidden;
+}
+
+.glass-card::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+  border-radius: inherit; pointer-events:none;
+}
+
+/* ── SETUP PAGE ── */
+.setup-hero {
+  text-align: center; padding: 20px 0 32px;
+}
+
+.setup-app-icon {
+  width: 90px; height: 90px; margin: 0 auto 20px;
+  background: var(--grad-hero);
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px;
+  box-shadow:
+    0 20px 60px rgba(0,122,255,0.4),
+    0 0 0 1px rgba(255,255,255,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%,100% { box-shadow: 0 20px 60px rgba(0,122,255,0.4), 0 0 0 1px rgba(255,255,255,0.1); }
+  50% { box-shadow: 0 25px 80px rgba(88,86,214,0.6), 0 0 0 1px rgba(255,255,255,0.15); }
+}
+
+.setup-hero h1 {
+  font-size: 32px; font-weight: 800; letter-spacing: -1px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.6));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.setup-hero p { font-size: 15px; color: var(--text2); line-height: 1.5; }
+
+/* ── FORM ── */
+.form-section { margin-bottom: 24px; }
+
+.form-section-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text3);
+  margin-bottom: 12px; padding: 0 4px;
+}
+
+.input-group {
+  background: var(--surface2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.input-group.error {
+  border-color: var(--v-red) !important;
+  animation: shake 0.4s ease;
+}
+
+.input-group.focused { border-color: var(--v-blue); }
+
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  20% { transform:translateX(-6px); }
+  40% { transform:translateX(6px); }
+  60% { transform:translateX(-4px); }
+  80% { transform:translateX(4px); }
+}
+
+.input-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.input-row:last-child { border-bottom: none; }
+
+.input-icon { font-size: 20px; flex-shrink: 0; }
+
+.input-inner { flex: 1; }
+
+.input-label {
+  font-size: 11px; font-weight: 700; color: var(--text3);
+  letter-spacing: 0.5px; margin-bottom: 3px;
+}
+
+.input-field {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; font-weight: 600; color: var(--text);
+}
+
+.input-field::placeholder { color: var(--text3); font-weight: 400; }
+
+.input-error-msg {
+  font-size: 11px; font-weight: 600;
+  color: var(--v-red); padding: 6px 18px 10px;
+  display: none;
+}
+
+.input-group.error .input-error-msg { display: block; }
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── EMOJI PICKER ── */
+.emoji-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+}
+
+.emoji-btn {
+  aspect-ratio: 1;
+  background: var(--surface2);
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; cursor: pointer;
+  transition: all 0.15s;
+}
+
+.emoji-btn:hover { background: var(--surface3); transform: scale(1.05); }
+
+.emoji-btn.active {
+  border-color: var(--v-blue);
+  background: rgba(0,122,255,0.15);
+  box-shadow: 0 0 0 3px rgba(0,122,255,0.2);
+  transform: scale(1.1);
+}
+
+/* ── BUTTON ── */
+.btn-vita {
+  width: 100%; padding: 17px;
+  background: var(--grad-hero);
+  border: none; border-radius: var(--radius-lg);
+  color: white; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; font-weight: 800; letter-spacing: -0.3px;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(0,122,255,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+
+.btn-vita::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  border-radius: inherit;
+}
+
+.btn-vita:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,122,255,0.5), inset 0 1px 0 rgba(255,255,255,0.2); }
+.btn-vita:active { transform: scale(0.98); }
+
+.btn-secondary {
+  width: 100%; padding: 15px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text2); font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; margin-top: 10px;
+}
+
+.btn-secondary:hover { background: var(--surface3); color: var(--text); }
+
+/* ── IMC HERO CARD ── */
+.imc-hero {
+  background: var(--grad-hero);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  margin-bottom: 16px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,122,255,0.35);
+}
+
+.imc-hero::before {
+  content:''; position:absolute;
+  top:-60px;right:-60px;
+  width:200px;height:200px;
+  background:rgba(255,255,255,0.1);
+  border-radius:50%;
+}
+
+.imc-hero::after {
+  content:''; position:absolute;
+  bottom:-80px;left:-20px;
+  width:220px;height:220px;
+  background:rgba(0,0,0,0.1);
+  border-radius:50%;
+}
+
+.imc-hero-top {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-bottom:20px; position:relative;z-index:1;
+}
+
+.imc-label-sm {
+  font-size:11px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;opacity:0.8;margin-bottom:4px;
+}
+
+.imc-big {
+  font-size:64px;font-weight:800;line-height:1;letter-spacing:-2px;
+  text-shadow:0 2px 20px rgba(0,0,0,0.2);
+}
+
+.imc-cat {
+  font-size:18px;font-weight:700;margin-top:4px;opacity:0.9;
+}
+
+.imc-avatar-wrap {
+  text-align:right; position:relative;z-index:1;
+}
+
+.imc-avatar { font-size:52px; display:block; margin-bottom:2px; }
+.imc-username {
+  font-size:12px;font-weight:700;opacity:0.85;
+  background:rgba(0,0,0,0.2);padding:3px 10px;
+  border-radius:20px;display:inline-block;
+}
+
+/* IMC scale */
+.imc-scale { position:relative;z-index:1; }
+.imc-scale-labels {
+  display:flex;justify-content:space-between;
+  font-size:10px;font-weight:700;opacity:0.7;margin-bottom:6px;
+}
+.imc-track {
+  height:8px;border-radius:4px;
+  background:rgba(255,255,255,0.2);
+  position:relative;overflow:visible;
+}
+.imc-fill {
+  height:100%;border-radius:4px;
+  background:rgba(255,255,255,0.9);
+  transition:width 1.2s cubic-bezier(0.4,0,0.2,1);
+  position:relative;
+}
+.imc-thumb {
+  position:absolute;right:-1px;top:50%;
+  width:16px;height:16px;
+  background:white;border-radius:50%;
+  transform:translate(50%,-50%);
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* ── STATS GRID ── */
+.stats-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;
+}
+
+.stat-tile {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:18px 12px;
+  text-align:center;
+  transition:transform 0.2s;
+  position:relative;overflow:hidden;
+}
+
+.stat-tile::before {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(145deg,rgba(255,255,255,0.04),transparent);
+  border-radius:inherit;
+}
+
+.stat-tile:hover { transform:translateY(-2px); }
+
+.stat-tile-icon { font-size:26px;margin-bottom:8px; }
+.stat-tile-val { font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:2px; }
+.stat-tile-lbl { font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase; }
+
+/* ── GOAL CARD ── */
+.goal-glass {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-xl);padding:22px;margin-bottom:16px;
+}
+
+.goal-glass-header {
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;
+}
+
+.goal-glass-title { font-size:16px;font-weight:800; }
+
+.days-pill {
+  background:rgba(0,122,255,0.15);
+  border:1px solid rgba(0,122,255,0.3);
+  color:var(--v-blue2);
+  font-size:12px;font-weight:700;
+  padding:5px 12px;border-radius:20px;
+}
+
+.goal-progress-bar {
+  height:10px;background:var(--surface2);
+  border-radius:5px;overflow:hidden;margin-bottom:10px;
+}
+
+.goal-progress-fill {
+  height:100%;border-radius:5px;
+  background:linear-gradient(90deg,var(--v-blue),var(--v-indigo));
+  transition:width 1s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 0 10px rgba(0,122,255,0.4);
+}
+
+.goal-meta-row {
+  display:flex;justify-content:space-between;
+  font-size:12px;font-weight:600;color:var(--text2);
+  margin-bottom:10px;
+}
+
+.goal-detail {
+  font-size:13px;font-weight:600;color:var(--text2);
+  background:var(--surface2);border-radius:var(--radius-sm);
+  padding:10px 14px;
+}
+
+/* ── SESSION NEXT CARD ── */
+.next-session-card {
+  background:linear-gradient(135deg,rgba(255,149,0,0.15),rgba(255,45,85,0.15));
+  border:1px solid rgba(255,149,0,0.3);
+  border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;
+  display:none;
+}
+
+.nsc-top { display:flex;justify-content:space-between;align-items:center;margin-bottom:8px; }
+.nsc-label { font-size:11px;font-weight:700;color:var(--v-orange);letter-spacing:1px;text-transform:uppercase; }
+.nsc-date { font-size:12px;font-weight:700;color:var(--v-orange);background:rgba(255,149,0,0.15);padding:4px 10px;border-radius:20px; }
+.nsc-name { font-size:16px;font-weight:800;margin-bottom:2px; }
+.nsc-note { font-size:13px;color:var(--text2); }
+
+/* ── MEASURE PAGE ── */
+.measure-result {
+  display:none;margin-top:16px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-xl);padding:24px;text-align:center;
+  animation:pageIn 0.4s ease;
+}
+
+.measure-result.show { display:block; }
+
+.result-num {
+  font-size:72px;font-weight:800;letter-spacing:-3px;
+  background:var(--grad-hero);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:4px;
+}
+
+.result-category {
+  font-size:20px;font-weight:800;margin-bottom:12px;
+}
+
+.result-desc {
+  font-size:14px;color:var(--text2);line-height:1.6;
+  background:var(--surface2);border-radius:var(--radius-md);padding:14px;
+}
+
+/* ── HISTORY ── */
+.history-item {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:18px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+  animation:pageIn 0.3s ease;
+  transition:background 0.2s;
+}
+.history-item:hover { background:var(--surface2); }
+
+.hist-mood { font-size:30px;flex-shrink:0; }
+.hist-body { flex:1;min-width:0; }
+.hist-date { font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.5px;margin-bottom:2px; }
+.hist-imc { font-size:22px;font-weight:800;letter-spacing:-0.5px; }
+.hist-cat { font-size:12px;font-weight:700;margin-top:1px; }
+.hist-note { font-size:11px;color:var(--text3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.hist-right { text-align:right;flex-shrink:0; }
+.hist-delta { font-size:14px;font-weight:800; }
+.hist-delta.up { color:var(--v-red); }
+.hist-delta.down { color:var(--v-green); }
+.hist-pts { font-size:11px;font-weight:700;color:var(--v-yellow);margin-top:3px; }
+
+/* ── SESSIONS PAGE ── */
+.sessions-top {
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;
+}
+
+.btn-add {
+  background:rgba(0,122,255,0.15);
+  border:1px solid rgba(0,122,255,0.3);
+  border-radius:var(--radius-sm);
+  color:var(--v-blue2);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;padding:9px 16px;
+  cursor:pointer;transition:all 0.2s;
+}
+.btn-add:hover { background:rgba(0,122,255,0.25); }
+
+.session-item {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:18px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+}
+
+.session-dot {
+  width:12px;height:12px;border-radius:50%;flex-shrink:0;
+}
+.session-dot.pending { background:var(--v-yellow);box-shadow:0 0 8px rgba(255,204,0,0.5); }
+.session-dot.done { background:var(--v-green);box-shadow:0 0 8px rgba(52,199,89,0.4); }
+.session-dot.missed { background:var(--v-red);box-shadow:0 0 8px rgba(255,59,48,0.4); }
+
+.session-body { flex:1; }
+.session-name { font-size:15px;font-weight:700;margin-bottom:2px; }
+.session-date { font-size:12px;color:var(--text2);font-weight:600; }
+
+.session-status-badge {
+  font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;
+}
+.session-status-badge.pending { background:rgba(255,204,0,0.15);color:var(--v-yellow); }
+.session-status-badge.done { background:rgba(52,199,89,0.15);color:var(--v-green); }
+.session-status-badge.missed { background:rgba(255,59,48,0.15);color:var(--v-red); }
+
+.btn-done-sm {
+  background:rgba(52,199,89,0.15);
+  border:1px solid rgba(52,199,89,0.3);
+  border-radius:var(--radius-sm);
+  color:var(--v-green);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:11px;font-weight:700;padding:5px 10px;
+  cursor:pointer;transition:all 0.2s;margin-top:6px;
+}
+
+/* ── ACHIEVEMENTS ── */
+.pts-hero {
+  background:linear-gradient(135deg,#7c6000,#c9a227,#FFD700,#c9a227,#7c6000);
+  background-size:200%;
+  animation:shimmer 3s linear infinite;
+  border-radius:var(--radius-xl);padding:28px;
+  text-align:center;margin-bottom:16px;
+  box-shadow:0 15px 50px rgba(255,204,0,0.3);
+  position:relative;overflow:hidden;
+}
+
+@keyframes shimmer {
+  0% { background-position:200% center; }
+  100% { background-position:-200% center; }
+}
+
+.pts-hero::before {
+  content:'⭐';font-size:100px;opacity:0.08;
+  position:absolute;top:-10px;right:-10px;
+}
+
+.pts-num { font-size:64px;font-weight:800;letter-spacing:-2px;color:#000;margin-bottom:4px; }
+.pts-label { font-size:14px;font-weight:700;color:rgba(0,0,0,0.7); }
+.pts-level { font-size:16px;font-weight:800;color:rgba(0,0,0,0.8);margin-top:8px; }
+
+.achievements-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+
+.ach-card {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:18px 12px;
+  text-align:center;transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+
+.ach-card:hover:not(.locked) { transform:translateY(-3px); border-color:var(--v-yellow); }
+.ach-card.locked { opacity:0.35;filter:grayscale(1); }
+
+.ach-card.unlocked {
+  border-color:rgba(255,204,0,0.4);
+  background:linear-gradient(145deg,rgba(255,204,0,0.08),var(--surface));
+  box-shadow:0 4px 20px rgba(255,204,0,0.1);
+}
+
+.ach-icon { font-size:34px;margin-bottom:8px;display:block; }
+.ach-name { font-size:12px;font-weight:800;margin-bottom:4px; }
+.ach-desc { font-size:10px;color:var(--text3);line-height:1.4; }
+.ach-pts { font-size:11px;font-weight:700;color:var(--v-yellow);margin-top:6px; }
+
+/* ── MODAL ── */
+.modal-backdrop {
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  align-items:flex-end;justify-content:center;
+}
+.modal-backdrop.show { display:flex; }
+
+.modal-sheet {
+  background:var(--surface);
+  border-radius:28px 28px 0 0;
+  border-top:1px solid var(--border);
+  padding:20px 20px max(24px,env(safe-area-inset-bottom));
+  width:100%;max-width:600px;
+  animation:sheetUp 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes sheetUp {
+  from { transform:translateY(100%); }
+  to { transform:translateY(0); }
+}
+
+.sheet-handle {
+  width:36px;height:4px;background:var(--surface3);
+  border-radius:2px;margin:0 auto 20px;display:block;
+}
+
+.sheet-title { font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:20px; }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed;bottom:96px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:rgba(44,44,46,0.95);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  color:white;padding:13px 22px;
+  border-radius:50px;font-size:13px;font-weight:700;
+  opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index:300;white-space:nowrap;pointer-events:none;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+}
+.toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+
+/* ── COOKIE ── */
+.cookie-bar {
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:rgba(28,28,30,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  padding:16px 20px max(16px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.cookie-bar.gone { display:none; }
+.cookie-text { font-size:12px;color:var(--text2);line-height:1.5;flex:1; }
+.cookie-text a { color:var(--v-blue2); }
+.cookie-accept {
+  padding:10px 20px;border:none;border-radius:var(--radius-sm);
+  background:var(--v-blue);color:white;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align:center;padding:60px 20px;color:var(--text3); }
+.empty-state .big { font-size:52px;margin-bottom:14px; }
+.empty-state p { font-size:14px;line-height:1.6; }
+
+/* ── PAGE TITLES ── */
+.page-title {
+  font-size:28px;font-weight:800;letter-spacing:-1px;
+  margin-bottom:4px;
+  background:linear-gradient(135deg,#fff 50%,rgba(255,255,255,0.5));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-subtitle { font-size:14px;color:var(--text3);margin-bottom:20px; }
+
+@media(max-width:380px) {
+  .imc-big { font-size:52px; }
+  .stats-grid { gap:8px; }
+  .achievements-grid { gap:8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient">
+  <div class="ambient-orb orb1"></div>
+  <div class="ambient-orb orb2"></div>
+  <div class="ambient-orb orb3"></div>
+</div>
+
+<!-- COOKIE BAR -->
+<div class="cookie-bar" id="cookieBar">
+  <div class="cookie-text">🔒 VITA-IMC guarda tus datos <strong>únicamente en este dispositivo</strong>. No enviamos nada a servidores externos. <a href="#">Política de privacidad</a></div>
+  <button class="cookie-accept" onclick="acceptCookies()">Entendido ✓</button>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="mainHeader" style="display:none">
+  <div class="header-logo">
+    <div class="logo-mark">💚</div>
+    <div class="logo-wordmark"><span class="vita">VITA-</span><span class="imc">IMC</span></div>
+  </div>
+  <div class="header-right">
+    <div class="pts-chip">⭐ <span id="hdrPts">0</span></div>
+    <div class="avatar-chip" id="hdrAvatar" onclick="goTab('logros')">😊</div>
+  </div>
+</header>
+
+<!-- BOTTOM NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <div class="nav-item active" id="nav-dashboard" onclick="goTab('dashboard')">
+      <div class="nav-icon">🏠</div><div class="nav-label">Inicio</div>
+    </div>
+    <div class="nav-item" id="nav-medir" onclick="goTab('medir')">
+      <div class="nav-icon">📏</div><div class="nav-label">Medir</div>
+    </div>
+    <div class="nav-item" id="nav-historial" onclick="goTab('historial')">
+      <div class="nav-icon">📊</div><div class="nav-label">Historial</div>
+    </div>
+    <div class="nav-item" id="nav-sesiones" onclick="goTab('sesiones')">
+      <div class="nav-icon">📅</div><div class="nav-label">Sesiones</div>
+    </div>
+    <div class="nav-item" id="nav-logros" onclick="goTab('logros')">
+      <div class="nav-icon">🏆</div><div class="nav-label">Logros</div>
+    </div>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ══ SETUP ══ -->
+  <div class="page active" id="page-setup">
+    <div class="setup-hero">
+      <div class="setup-app-icon">💚</div>
+      <h1>Bienvenido a VITA-IMC</h1>
+      <p>Tu asistente de salud personal.<br>Todos tus datos permanecen en tu dispositivo.</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="form-section">
+        <div class="form-section-title">Tu perfil</div>
+        <div class="input-group" id="ig-name">
+          <div class="input-row">
+            <div class="input-icon">👤</div>
+            <div class="input-inner">
+              <div class="input-label">NOMBRE O APODO</div>
+              <input class="input-field" id="sName" type="text" placeholder="¿Cómo te llamamos?" maxlength="20">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Por favor ingresa tu nombre</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Elige tu avatar</div>
+        <div class="emoji-grid" id="avatarGrid">
+          <div class="emoji-btn active" data-e="😊">😊</div>
+          <div class="emoji-btn" data-e="🦁">🦁</div>
+          <div class="emoji-btn" data-e="🐯">🐯</div>
+          <div class="emoji-btn" data-e="🐻">🐻</div>
+          <div class="emoji-btn" data-e="🦊">🦊</div>
+          <div class="emoji-btn" data-e="🐼">🐼</div>
+          <div class="emoji-btn" data-e="🦋">🦋</div>
+          <div class="emoji-btn" data-e="🌸">🌸</div>
+          <div class="emoji-btn" data-e="⚡">⚡</div>
+          <div class="emoji-btn" data-e="🌊">🌊</div>
+          <div class="emoji-btn" data-e="🔥">🔥</div>
+          <div class="emoji-btn" data-e="🌙">🌙</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Medidas corporales</div>
+        <div class="row-2">
+          <div class="input-group" id="ig-height">
+            <div class="input-row">
+              <div class="input-icon">📐</div>
+              <div class="input-inner">
+                <div class="input-label">ALTURA (cm)</div>
+                <input class="input-field" id="sHeight" type="number" placeholder="170" min="100" max="250">
+              </div>
+            </div>
+            <div class="input-error-msg">⚠ Altura inválida</div>
+          </div>
+          <div class="input-group" id="ig-weight">
+            <div class="input-row">
+              <div class="input-icon">⚖️</div>
+              <div class="input-inner">
+                <div class="input-label">PESO (kg)</div>
+                <input class="input-field" id="sWeight" type="number" placeholder="70" min="30" max="300" step="0.1">
+              </div>
+            </div>
+            <div class="input-error-msg">⚠ Peso inválido</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Tu objetivo</div>
+        <div class="input-group" id="ig-goal">
+          <div class="input-row">
+            <div class="input-icon">🎯</div>
+            <div class="input-inner">
+              <div class="input-label">PESO META (kg)</div>
+              <input class="input-field" id="sGoal" type="number" placeholder="65" min="30" max="300" step="0.1">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Ingresa tu peso objetivo</div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="input-group" id="ig-date">
+          <div class="input-row">
+            <div class="input-icon">📅</div>
+            <div class="input-inner">
+              <div class="input-label">FECHA LÍMITE</div>
+              <input class="input-field" id="sDate" type="date">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Selecciona una fecha</div>
+        </div>
+      </div>
+
+      <button class="btn-vita" onclick="doSetup()">Comenzar mi camino ✦</button>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div class="page" id="page-dashboard">
+    <div style="margin-bottom:20px">
+      <div class="page-title" id="greetMsg">Hola 👋</div>
+      <div class="page-subtitle" id="greetDate">—</div>
+    </div>
+
+    <div class="imc-hero">
+      <div class="imc-hero-top">
+        <div>
+          <div class="imc-label-sm">IMC Actual</div>
+          <div class="imc-big" id="dIMC">—</div>
+          <div class="imc-cat" id="dCat">Sin datos</div>
+        </div>
+        <div class="imc-avatar-wrap">
+          <span class="imc-avatar" id="dAvatar">😊</span>
+          <span class="imc-username" id="dName">Tú</span>
+        </div>
+      </div>
+      <div class="imc-scale">
+        <div class="imc-scale-labels">
+          <span>Bajo</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span>
+        </div>
+        <div class="imc-track">
+          <div class="imc-fill" id="dBar" style="width:0%">
+            <div class="imc-thumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-tile">
+        <div class="stat-tile-icon">📏</div>
+        <div class="stat-tile-val" id="sMed">0</div>
+        <div class="stat-tile-lbl">Mediciones</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-icon">🔥</div>
+        <div class="stat-tile-val" id="sRacha">0</div>
+        <div class="stat-tile-lbl">Racha</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-icon">⭐</div>
+        <div class="stat-tile-val" id="sPts">0</div>
+        <div class="stat-tile-lbl">Puntos</div>
+      </div>
+    </div>
+
+    <div class="goal-glass">
+      <div class="goal-glass-header">
+        <div class="goal-glass-title">🎯 Tu meta</div>
+        <div class="days-pill" id="gDays">—</div>
+      </div>
+      <div class="goal-meta-row">
+        <span id="gStart">Inicio: —</span>
+        <span id="gNow">Ahora: —</span>
+        <span id="gTarget">Meta: —</span>
+      </div>
+      <div class="goal-progress-bar">
+        <div class="goal-progress-fill" id="gFill" style="width:0%"></div>
+      </div>
+      <div class="goal-detail" id="gDetail">Configura tu meta</div>
+    </div>
+
+    <div class="next-session-card" id="nextCard">
+      <div class="nsc-top">
+        <div class="nsc-label">📅 Próxima sesión</div>
+        <div class="nsc-date" id="nscDate">—</div>
+      </div>
+      <div class="nsc-name" id="nscName">—</div>
+      <div class="nsc-note" id="nscNote">—</div>
+    </div>
+
+    <button class="btn-vita" onclick="goTab('medir')">+ Nueva medición de hoy</button>
+  </div>
+
+  <!-- ══ MEDIR ══ -->
+  <div class="page" id="page-medir">
+    <div class="page-title">Medir IMC</div>
+    <div class="page-subtitle">Registra tu peso y obtén tu IMC al instante</div>
+
+    <div class="glass-card">
+      <div class="form-section">
+        <div class="input-group" id="ig-mw">
+          <div class="input-row">
+            <div class="input-icon">⚖️</div>
+            <div class="input-inner">
+              <div class="input-label">PESO DE HOY (kg)</div>
+              <input class="input-field" id="mWeight" type="number" placeholder="70.5" min="30" max="300" step="0.1">
+            </div>
+          </div>
+          <div class="input-error-msg">⚠ Ingresa un peso válido (30–300 kg)</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">¿Cómo te sientes hoy?</div>
+        <div class="emoji-grid" id="moodGrid">
+          <div class="emoji-btn active" data-e="😊">😊</div>
+          <div class="emoji-btn" data-e="😄">😄</div>
+          <div class="emoji-btn" data-e="😐">😐</div>
+          <div class="emoji-btn" data-e="😔">😔</div>
+          <div class="emoji-btn" data-e="💪">💪</div>
+          <div class="emoji-btn" data-e="😴">😴</div>
+          <div class="emoji-btn" data-e="🤒">🤒</div>
+          <div class="emoji-btn" data-e="🔥">🔥</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="input-group">
+          <div class="input-row">
+            <div class="input-icon">✏️</div>
+            <div class="input-inner">
+              <div class="input-label">NOTA (OPCIONAL)</div>
+              <input class="input-field" id="mNote" type="text" placeholder="Ej: empecé a correr esta semana..." maxlength="100">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-vita" onclick="doMeasure()">Calcular y guardar 💾</button>
+
+      <div class="measure-result" id="mResult">
+        <div class="result-num" id="rNum">0</div>
+        <div class="result-category" id="rCat">—</div>
+        <div class="result-desc" id="rDesc">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HISTORIAL ══ -->
+  <div class="page" id="page-historial">
+    <div class="page-title">Historial</div>
+    <div class="page-subtitle">Cada registro es un paso en tu camino</div>
+    <div id="histList"></div>
+  </div>
+
+  <!-- ══ SESIONES ══ -->
+  <div class="page" id="page-sesiones">
+    <div class="sessions-top">
+      <div>
+        <div class="page-title">Sesiones</div>
+        <div class="page-subtitle" style="margin-bottom:0">Programa tu seguimiento</div>
+      </div>
+      <button class="btn-add" onclick="openModal()">+ Nueva</button>
+    </div>
+    <div id="sessList"></div>
+  </div>
+
+  <!-- ══ LOGROS ══ -->
+  <div class="page" id="page-logros">
+    <div class="page-title">Logros</div>
+    <div class="page-subtitle">Tu progreso, tu orgullo</div>
+
+    <div class="pts-hero">
+      <div class="pts-num" id="totalPts">0</div>
+      <div class="pts-label">Puntos acumulados</div>
+      <div class="pts-level" id="ptsLevel">Nivel: Principiante 🌱</div>
+    </div>
+
+    <div class="achievements-grid" id="achGrid"></div>
+  </div>
+
+</main>
+
+<!-- SESSION MODAL -->
+<div class="modal-backdrop" id="sessModal">
+  <div class="modal-sheet">
+    <span class="sheet-handle"></span>
+    <div class="sheet-title">📅 Nueva sesión</div>
+
+    <div class="form-section">
+      <div class="input-group" id="ig-sname">
+        <div class="input-row">
+          <div class="input-icon">📝</div>
+          <div class="input-inner">
+            <div class="input-label">NOMBRE DE LA SESIÓN</div>
+            <input class="input-field" id="sessName" type="text" placeholder="Ej: Control mensual de peso">
+          </div>
+        </div>
+        <div class="input-error-msg">⚠ Escribe el nombre de la sesión</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="input-group" id="ig-sdate">
+        <div class="input-row">
+          <div class="input-icon">📅</div>
+          <div class="input-inner">
+            <div class="input-label">FECHA</div>
+            <input class="input-field" id="sessDate" type="date">
+          </div>
+        </div>
+        <div class="input-error-msg">⚠ Selecciona una fecha</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="input-group">
+        <div class="input-row">
+          <div class="input-icon">💬</div>
+          <div class="input-inner">
+            <div class="input-label">NOTA (OPCIONAL)</div>
+            <input class="input-field" id="sessNote" type="text" placeholder="Ej: Pesar en ayunas">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-vita" onclick="saveSession()">Guardar sesión</button>
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+let profile=null, measurements=[], sessions=[], selAvatar='😊', selMood='😊';
+
+const ACHIEVEMENTS=[
+  {id:'first',icon:'🌱',name:'Primer Paso',desc:'Primera medición',pts:50,check:()=>measurements.length>=1},
+  {id:'five',icon:'💎',name:'Consistente',desc:'5 mediciones',pts:120,check:()=>measurements.length>=5},
+  {id:'ten',icon:'🔟',name:'Decena',desc:'10 mediciones',pts:200,check:()=>measurements.length>=10},
+  {id:'month',icon:'🗓️',name:'Un Mes',desc:'30 mediciones',pts:400,check:()=>measurements.length>=30},
+  {id:'goal10',icon:'🎯',name:'10% Logrado',desc:'Avanzaste 10% en tu meta',pts:150,check:()=>goalPct()>=10},
+  {id:'goal50',icon:'🏅',name:'A Mitad',desc:'50% hacia tu meta',pts:300,check:()=>goalPct()>=50},
+  {id:'goal100',icon:'🏆',name:'¡Meta!',desc:'¡Lograste tu objetivo!',pts:1000,check:()=>goalPct()>=100},
+  {id:'sessions3',icon:'🔥',name:'3 Sesiones',desc:'3 sesiones programadas',pts:75,check:()=>sessions.length>=3},
+  {id:'imcdrop',icon:'📉',name:'IMC Mejor',desc:'IMC mejoró 2+ puntos',pts:200,check:()=>imcDrop()},
+];
+
+function goalPct(){
+  if(!profile||!measurements.length)return 0;
+  const s=measurements[measurements.length-1].weight, c=measurements[0].weight, g=profile.goalWeight;
+  if(s===g)return 100;
+  return Math.min(100,Math.round(Math.abs(s-c)/Math.abs(s-g)*100));
+}
+
+function imcDrop(){
+  if(!profile||measurements.length<2)return false;
+  const f=imc(measurements[measurements.length-1].weight), l=imc(measurements[0].weight);
+  return Math.abs(f-l)>=2;
+}
+
+// ── IMC ──
+function imc(w){ const h=profile.height/100; return Math.round(w/(h*h)*10)/10; }
+
+function imcInfo(v){
+  if(v<18.5) return{cat:'Bajo peso',color:'#5AC8FA',msg:'Tu peso está por debajo del rango saludable. Considera consultar un nutricionista para un plan adecuado.'};
+  if(v<25) return{cat:'Peso normal ✓',color:'#34C759',msg:'¡Excelente! Tu IMC está en el rango saludable. Mantén tus hábitos actuales y sigue así.'};
+  if(v<30) return{cat:'Sobrepeso',color:'#FF9500',msg:'Tu peso está ligeramente por encima. Pequeños ajustes en dieta y actividad física marcan diferencia.'};
+  if(v<35) return{cat:'Obesidad I',color:'#FF3B30',msg:'Es recomendable consultar con un médico para recibir orientación personalizada.'};
+  return{cat:'Obesidad II+',color:'#FF2D55',msg:'Recomendamos consultar con un profesional de salud para un plan integral.'};
+}
+
+function barPct(v){ return Math.min(95,Math.max(5,(v-15)/25*100)); }
+
+// ── STORAGE ──
+function save(){
+  try{
+    localStorage.setItem('vi2_p',JSON.stringify(profile));
+    localStorage.setItem('vi2_m',JSON.stringify(measurements));
+    localStorage.setItem('vi2_s',JSON.stringify(sessions));
+  }catch(e){}
+}
+
+function load(){
+  try{
+    const p=localStorage.getItem('vi2_p'), m=localStorage.getItem('vi2_m'), s=localStorage.getItem('vi2_s');
+    if(p)profile=JSON.parse(p);
+    if(m)measurements=JSON.parse(m);
+    if(s)sessions=JSON.parse(s);
+  }catch(e){}
+}
+
+// ── VALIDATION ──
+function validate(id, condition, focus){
+  const el=document.getElementById(id);
+  if(condition){ el.classList.remove('error'); return true; }
+  else{ el.classList.add('error'); if(focus)el.querySelector('.input-field')?.focus(); return false; }
+}
+
+function clearError(id){ document.getElementById(id)?.classList.remove('error'); }
+
+// ── SETUP ──
+document.getElementById('avatarGrid').addEventListener('click',e=>{
+  const btn=e.target.closest('.emoji-btn'); if(!btn)return;
+  document.querySelectorAll('#avatarGrid .emoji-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); selAvatar=btn.dataset.e;
+});
+
+document.getElementById('moodGrid').addEventListener('click',e=>{
+  const btn=e.target.closest('.emoji-btn'); if(!btn)return;
+  document.querySelectorAll('#moodGrid .emoji-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); selMood=btn.dataset.e;
+});
+
+// Clear errors on input
+['sName','sHeight','sWeight','sGoal','sDate'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input',()=>{ const map={sName:'ig-name',sHeight:'ig-height',sWeight:'ig-weight',sGoal:'ig-goal',sDate:'ig-date'}; clearError(map[id]); });
+});
+
+['mWeight'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input',()=>clearError('ig-mw'));
+});
+
+function doSetup(){
+  const name=document.getElementById('sName').value.trim();
+  const height=parseFloat(document.getElementById('sHeight').value);
+  const weight=parseFloat(document.getElementById('sWeight').value);
+  const goal=parseFloat(document.getElementById('sGoal').value);
+  const date=document.getElementById('sDate').value;
+
+  let ok=true;
+  if(!validate('ig-name',name.length>=1))ok=false;
+  if(!validate('ig-height',height>=100&&height<=250))ok=false;
+  if(!validate('ig-weight',weight>=30&&weight<=300))ok=false;
+  if(!validate('ig-goal',goal>=30&&goal<=300))ok=false;
+  if(!validate('ig-date',!!date))ok=false;
+  if(!ok){ toast('⚠️ Completa todos los campos correctamente'); return; }
+
+  profile={name,emoji:selAvatar,height,goalWeight:goal,goalDate:date,startWeight:weight,created:Date.now()};
+  measurements.unshift({weight,imc:imc(weight),mood:selAvatar,note:'Primera medición 🌱',date:new Date().toISOString(),pts:50});
+  save();
+  bootApp();
+  toast('🎉 ¡Bienvenido! +50 puntos por comenzar');
+}
+
+// ── BOOT ──
+function bootApp(){
+  document.getElementById('page-setup').classList.remove('active');
+  document.getElementById('mainHeader').style.display='flex';
+  document.getElementById('mainNav').style.display='block';
+  document.getElementById('hdrAvatar').textContent=profile.emoji;
+  document.getElementById('hdrAvatar').title=profile.name;
+  refreshAll();
+  goTab('dashboard');
+}
+
+// ── REFRESH ──
+function refreshAll(){
+  if(!profile)return;
+  const pts=totalPoints();
+  document.getElementById('hdrPts').textContent=pts;
+  document.getElementById('sPts').textContent=pts;
+  document.getElementById('totalPts').textContent=pts;
+  document.getElementById('ptsLevel').textContent='Nivel: '+level(pts);
+  document.getElementById('sMed').textContent=measurements.length;
+  document.getElementById('sRacha').textContent=streak();
+
+  const now=new Date(), h=now.getHours();
+  const g=h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches';
+  document.getElementById('greetMsg').textContent=`${g}, ${profile.name} ${profile.emoji}`;
+  document.getElementById('greetDate').textContent=now.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
+
+  if(measurements.length){
+    const l=measurements[0], info=imcInfo(l.imc);
+    document.getElementById('dIMC').textContent=l.imc;
+    document.getElementById('dCat').textContent=info.cat;
+    document.getElementById('dBar').style.width=barPct(l.imc)+'%';
+  }
+  document.getElementById('dAvatar').textContent=profile.emoji;
+  document.getElementById('dName').textContent=profile.name;
+
+  // Goal
+  const pct=goalPct();
+  document.getElementById('gFill').style.width=Math.min(100,pct)+'%';
+  document.getElementById('gStart').textContent=`Inicio: ${profile.startWeight}kg`;
+  document.getElementById('gTarget').textContent=`Meta: ${profile.goalWeight}kg`;
+  if(measurements.length) document.getElementById('gNow').textContent=`Ahora: ${measurements[0].weight}kg`;
+  const diff=measurements.length?Math.abs(measurements[0].weight-profile.goalWeight).toFixed(1):0;
+  document.getElementById('gDetail').textContent=`${pct}% completado · faltan ${diff}kg`;
+  if(profile.goalDate){
+    const d=Math.ceil((new Date(profile.goalDate)-now)/86400000);
+    document.getElementById('gDays').textContent=d>0?`${d} días`:'¡Fecha llegó!';
+  }
+
+  // Next session
+  const up=sessions.filter(s=>s.status==='pending'&&new Date(s.date)>=now).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if(up.length){
+    document.getElementById('nextCard').style.display='block';
+    document.getElementById('nscDate').textContent=new Date(up[0].date+'T12:00').toLocaleDateString('es',{day:'numeric',month:'short'});
+    document.getElementById('nscName').textContent=up[0].name;
+    document.getElementById('nscNote').textContent=up[0].note||'Sin notas';
+  }
+  renderHist(); renderSess(); renderAch();
+}
+
+function totalPoints(){
+  return measurements.reduce((s,m)=>s+(m.pts||20),0)+
+         sessions.filter(s=>s.status==='done').length*30+
+         ACHIEVEMENTS.filter(a=>a.check()).reduce((s,a)=>s+a.pts,0);
+}
+
+function level(p){
+  if(p<100)return'Principiante 🌱';
+  if(p<300)return'Explorador 🚶';
+  if(p<600)return'Comprometido 💪';
+  if(p<1000)return'Atleta 🏃';
+  return'Campeón 🏆';
+}
+
+function streak(){
+  if(!measurements.length)return 0;
+  let s=1;
+  for(let i=0;i<measurements.length-1;i++){
+    const d=(new Date(measurements[i].date)-new Date(measurements[i+1].date))/86400000;
+    if(d<=2)s++;else break;
+  }
+  return s;
+}
+
+// ── MEASURE ──
+function doMeasure(){
+  const w=parseFloat(document.getElementById('mWeight').value);
+  if(!validate('ig-mw',w>=30&&w<=300,true)){toast('⚠️ Ingresa un peso válido'); return;}
+  const note=document.getElementById('mNote').value.trim();
+  const v=imc(w), info=imcInfo(v);
+  let pts=20;
+  if(measurements.length){
+    const prev=measurements[0];
+    const improving=(profile.goalWeight<profile.startWeight&&w<prev.weight)||(profile.goalWeight>profile.startWeight&&w>prev.weight);
+    if(improving)pts+=15;
+  }
+  measurements.unshift({weight:w,imc:v,mood:selMood,note,date:new Date().toISOString(),pts});
+  save();
+  document.getElementById('rNum').textContent=v;
+  document.getElementById('rCat').textContent=info.cat;
+  document.getElementById('rCat').style.color=info.color;
+  document.getElementById('rDesc').textContent=info.msg;
+  document.getElementById('mResult').classList.add('show');
+  document.getElementById('mWeight').value='';
+  document.getElementById('mNote').value='';
+  refreshAll();
+  checkNewAch();
+  toast(`✅ Guardado! +${pts} puntos`);
+}
+
+// ── HISTORY ──
+function renderHist(){
+  const el=document.getElementById('histList');
+  if(!measurements.length){
+    el.innerHTML='<div class="empty-state"><div class="big">📭</div><p>Aún no tienes mediciones.<br>¡Empieza tu primer registro hoy!</p></div>';
+    return;
+  }
+  el.innerHTML=measurements.map((m,i)=>{
+    const info=imcInfo(m.imc);
+    const prev=measurements[i+1];
+    let delta='',cls='';
+    if(prev){
+      const d=(m.weight-prev.weight).toFixed(1);
+      if(d>0){delta=`+${d}kg`;cls='up';}
+      else if(d<0){delta=`${d}kg`;cls='down';}
+      else{delta='=';}
+    }
+    return `<div class="history-item">
+      <div class="hist-mood">${m.mood}</div>
+      <div class="hist-body">
+        <div class="hist-date">${new Date(m.date).toLocaleDateString('es',{weekday:'short',day:'numeric',month:'short'})}</div>
+        <div class="hist-imc">IMC ${m.imc} · ${m.weight}kg</div>
+        <div class="hist-cat" style="color:${info.color}">${info.cat}</div>
+        ${m.note?`<div class="hist-note">"${m.note}"</div>`:''}
+      </div>
+      <div class="hist-right">
+        ${delta?`<div class="hist-delta ${cls}">${delta}</div>`:''}
+        <div class="hist-pts">+${m.pts||20}⭐</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── SESSIONS ──
+function openModal(){
+  document.getElementById('sessModal').classList.add('show');
+  const t=new Date(); t.setDate(t.getDate()+1);
+  document.getElementById('sessDate').value=t.toISOString().split('T')[0];
+}
+function closeModal(){ document.getElementById('sessModal').classList.remove('show'); }
+
+document.getElementById('sessName').addEventListener('input',()=>clearError('ig-sname'));
+document.getElementById('sessDate').addEventListener('input',()=>clearError('ig-sdate'));
+
+function saveSession(){
+  const name=document.getElementById('sessName').value.trim();
+  const date=document.getElementById('sessDate').value;
+  const note=document.getElementById('sessNote').value.trim();
+  let ok=true;
+  if(!validate('ig-sname',name.length>=1))ok=false;
+  if(!validate('ig-sdate',!!date))ok=false;
+  if(!ok){toast('⚠️ Completa los campos requeridos');return;}
+  sessions.push({id:Date.now(),name,date,note,status:'pending'});
+  sessions.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  save(); closeModal(); refreshAll();
+  toast('📅 ¡Sesión programada!');
+  document.getElementById('sessName').value='';
+  document.getElementById('sessNote').value='';
+}
+
+function markDone(id){
+  const s=sessions.find(x=>x.id===id);
+  if(s){s.status='done';save();refreshAll();toast('✅ ¡Sesión completada! +30 puntos');}
+}
+
+function renderSess(){
+  const el=document.getElementById('sessList');
+  if(!sessions.length){
+    el.innerHTML='<div class="empty-state"><div class="big">🗓️</div><p>Programa tu primera sesión<br>de seguimiento de salud</p></div>';
+    return;
+  }
+  const now=new Date();
+  el.innerHTML=sessions.map(s=>{
+    const isPast=new Date(s.date)<now&&s.status==='pending';
+    const st=isPast?'missed':s.status;
+    const lbl={pending:'Pendiente',done:'Completada ✓',missed:'Vencida'}[st];
+    const dateStr=new Date(s.date+'T12:00').toLocaleDateString('es',{weekday:'short',day:'numeric',month:'long'});
+    return `<div class="session-item">
+      <div class="session-dot ${st}"></div>
+      <div class="session-body">
+        <div class="session-name">${s.name}</div>
+        <div class="session-date">${dateStr}${s.note?' · '+s.note:''}</div>
+        ${st==='pending'?`<button class="btn-done-sm" onclick="markDone(${s.id})">✓ Marcar hecha</button>`:''}
+      </div>
+      <div class="session-status-badge ${st}">${lbl}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── ACHIEVEMENTS ──
+function renderAch(){
+  const unlocked=new Set(ACHIEVEMENTS.filter(a=>a.check()).map(a=>a.id));
+  document.getElementById('achGrid').innerHTML=ACHIEVEMENTS.map(a=>`
+    <div class="ach-card ${unlocked.has(a.id)?'unlocked':'locked'}">
+      <span class="ach-icon">${a.icon}</span>
+      <div class="ach-name">${a.name}</div>
+      <div class="ach-desc">${a.desc}</div>
+      <div class="ach-pts">+${a.pts} pts</div>
+    </div>
+  `).join('');
+}
+
+let prevAch=new Set();
+function checkNewAch(){
+  const now=new Set(ACHIEVEMENTS.filter(a=>a.check()).map(a=>a.id));
+  ACHIEVEMENTS.forEach(a=>{if(now.has(a.id)&&!prevAch.has(a.id))setTimeout(()=>toast(`🏆 Logro: ${a.name}! +${a.pts}pts`),1500);});
+  prevAch=now;
+}
+
+// ── TABS ──
+function goTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  document.getElementById('nav-'+tab).classList.add('active');
+  if(tab==='medir') document.getElementById('mResult').classList.remove('show');
+  refreshAll();
+}
+
+// ── TOAST ──
+let tTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(tTimer); tTimer=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ── COOKIES ──
+function acceptCookies(){
+  document.getElementById('cookieBar').classList.add('gone');
+  try{localStorage.setItem('vi2_ck','1');}catch(e){}
+}
+
+// ── BOOT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('vi2_ck')) document.getElementById('cookieBar').classList.add('gone');
+  load();
+  if(profile){ prevAch=new Set(ACHIEVEMENTS.filter(a=>a.check()).map(a=>a.id)); bootApp(); }
+  else document.getElementById('page-setup').classList.add('active');
+});
+</script>
+</body>
+</html>
